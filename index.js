@@ -3,12 +3,22 @@ let myLeads = []
 const inputEl = document.getElementById("input-el")
 const ulEl = document.getElementById("ul-el")
 const delbtn = document.getElementById("delete-btn")
+const tabBtn = document.getElementById("save-tab")
 
 let LeadsFromLocal = JSON.parse(localStorage.getItem("myLeads"))
 if (LeadsFromLocal) {    
     myLeads = LeadsFromLocal
     render(myLeads)
 }
+
+tabBtn.addEventListener("click", function() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        myLeads.push(tabs[0].url)
+        localStorage.setItem("myLeads", JSON.stringify(myLeads))
+        render(myLeads)
+    })
+    
+})
 
 function render(leads) {
     let listItems = ""
